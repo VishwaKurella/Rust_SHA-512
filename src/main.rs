@@ -1,3 +1,5 @@
+use std::io;
+
 static INITIAL_BUFFER: [u64; 8] = [
     0x6A09E667F3BCC908u64,
     0xBB67AE8584CAA73Bu64,
@@ -97,15 +99,14 @@ fn process_user_input(input: &str) -> Vec<u8> {
     let original_input_bits = (original_input_bytes.len() * 8) as u128;
     let mut buffer: Vec<u8> = original_input_bytes.to_vec();
     buffer.push(0x80);
-    let mut padding_len = 128 - ((buffer.len() + 16) % 128);
-    if padding_len == 128 {
+    let mut padding_len = 112 - (buffer.len() % 128);
+    if padding_len == 112 {
         padding_len = 0;
     }
     buffer.extend(std::iter::repeat(0).take(padding_len));
     for i in (0..16).rev() {
         buffer.push(((original_input_bits >> (i * 8)) & 0xFF) as u8);
     }
-
     buffer
 }
 
@@ -144,7 +145,6 @@ fn message_schedule(chunk: &[u8]) -> [u64; 80] {
             .wrapping_add(s0)
             .wrapping_add(s1);
     }
-
     schedule
 }
 
@@ -195,13 +195,14 @@ fn process_buffer(buffer: Vec<u8>) -> String {
     }
     current_buffer
         .iter()
-        .map(|x| format!("{:08x}", x))
+        .map(|x| format!("{:016x}", x))
         .collect()
 }
 
-fn main() {
-    let input = "a";
+fn main() -> Result<(), io::Error> {
+    let input = "your input test";
     let processed_input_buffer = process_user_input(input);
     let final_hash = process_buffer(processed_input_buffer);
     println!("SHA-512 Hash: {}", final_hash);
+    Ok(())
 }
