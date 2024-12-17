@@ -111,10 +111,6 @@ println!("SHA-512 Hash: {}", final_hash);
 SHA-512 Hash: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b1692a8b8c7bb65f129eb7a4f013b0e6c56e36f83234e4c38f93a6250d46bc17310e9a08aabccf63d7880278efce8f3
 ```
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Contributing
 
 Contributions are welcome! If you encounter bugs or have ideas for improvements, please feel free to open an issue or submit a pull request.
