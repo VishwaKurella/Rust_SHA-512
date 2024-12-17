@@ -1,3 +1,4 @@
+use std::fs;
 use std::io;
 
 static INITIAL_BUFFER: [u64; 8] = [
@@ -94,7 +95,7 @@ const K: [u64; 80] = [
     0x6c44198c4a475817,
 ];
 
-fn process_user_input(input: &str) -> Vec<u8> {
+fn process_user_input(input: String) -> Vec<u8> {
     let original_input_bytes = input.as_bytes();
     let original_input_bits = (original_input_bytes.len() * 8) as u128;
     let mut buffer: Vec<u8> = original_input_bytes.to_vec();
@@ -200,7 +201,13 @@ fn process_buffer(buffer: Vec<u8>) -> String {
 }
 
 fn main() -> Result<(), io::Error> {
-    let input = "your input test";
+    let path = "./Cargo.lock";
+    let input = match fs::read_to_string(path) {
+        Ok(content) => content,
+        Err(e) => {
+            return Err(io::Error::new(io::ErrorKind::Unsupported, e));
+        }
+    };
     let processed_input_buffer = process_user_input(input);
     let final_hash = process_buffer(processed_input_buffer);
     println!("SHA-512 Hash: {}", final_hash);
